@@ -10,4 +10,4 @@
 
 # Author
 
-Author:: La Presse (<jtheroux@lapresse.ca>)
+Author:: Jean-Francois Theroux (<failshell@gmail.com>)
