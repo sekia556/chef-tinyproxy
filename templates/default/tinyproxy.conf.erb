@@ -5,10 +5,26 @@ User <%= node[:tinyproxy][:user] %>
 Group <%= node[:tinyproxy][:group] %>
 
 Port <%= node[:tinyproxy][:port] %>
+<% if !node[:tinyproxy][:listen_address].nil? and !node[:tinyproxy][:listen_address].empty? %>
 Listen <%= node[:tinyproxy][:listen_address] %>
+<% end %>
+<% if !node[:tinyproxy][:bind_address].nil? and !node[:tinyproxy][:bind_address].empty? %>
+Bind <%= node[:tinyproxy][:bind_address] %>
+<% end %>
+<% if !node[:tinyproxy][:bindsame].nil? and !node[:tinyproxy][:bindsame].empty? %>
+Bind <%= node[:tinyproxy][:bindsame] %>
+<% end %>
+
 Timeout <%= node[:tinyproxy][:timeout] %>
 
+#ErrorFile 404 "/usr/share/tinyproxy/404.html"
+#ErrorFile 400 "/usr/share/tinyproxy/400.html"
+#ErrorFile 503 "/usr/share/tinyproxy/503.html"
+#ErrorFile 403 "/usr/share/tinyproxy/403.html"
+#ErrorFile 408 "/usr/share/tinyproxy/408.html"
 DefaultErrorFile "/usr/share/tinyproxy/default.html"
+
+#StatHost "tinyproxy.stats"
 StatFile "/usr/share/tinyproxy/stats.html"
 
 <% if node[:tinyproxy][:logging][:mode] == 'file' %>
@@ -21,18 +37,50 @@ LogLevel <%= node[:tinyproxy][:logging][:level] %>
 
 PidFile "<%= node[:tinyproxy][:pid_file] %>"
 
+#XTinyproxy Yes
+
+<% node[:tinyproxy][:upstreams].each do |u| %>
+Upstream <%= u %>
+<% end %>
+<% node[:tinyproxy][:no_upstreams].each do |n| %>
+no upstream "<%= n %>"
+<% end %>
+
 MaxClients 100
 MinSpareServers 5
 MaxSpareServers 20
 StartServers 10
 MaxRequestsPerChild 0
 
-<% node[:tinyproxy][:allow].each do |a| %>
+<% node[:tinyproxy][:allows].each do |a| %>
 Allow <%= a %>
 <% end %>
 
-ViaProxyName "tinyproxy"
+<% node[:tinyproxy][:add_headers].each do |k, v| %>
+AddHeader "<%= k %>" "<%= v %>"
+<% end %>
 
+#ViaProxyName "tinyproxy"
+
+#Filter "/etc/tinyproxy/filter"
+#FilterURLs On
+#FilterExtended On
+#FilterCaseSensitive On
+#FilterDefaultDeny Yes
+
+#Anonymous "Host"
+#Anonymous "Authorization"
+#Anonymous "Cookie"
+
+<% if !node[:tinyproxy][:disableviaheader].nil? and !node[:tinyproxy][:disableviaheader].empty? %>
 DisableViaHeader <%= node[:tinyproxy][:disableviaheader] %>
+<% end %>
 
 ConnectPort 443
+ConnectPort 563
+
+#ReversePath "/google/"	"http://www.google.com/"
+#ReversePath "/wired/"	"http://www.wired.com/"
+#ReverseOnly Yes
+#ReverseMagic Yes
+#ReverseBaseURL "http://localhost:8888/"
