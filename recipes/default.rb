@@ -3,6 +3,7 @@
 # Recipe:: default
 #
 # Copyright (C) 2013 La Presse
+# Copyright (C) 2014 sekia
 # 
 # All rights reserved - Do Not Redistribute
 
@@ -14,5 +15,6 @@ template '/etc/tinyproxy/tinyproxy.conf' do
 end
 
 service 'tinyproxy' do
-  action [:start, :enable] 
+  action [:start, :enable]
+  supports status: true, start: true, stop: true, restart: true, reload: true
 end
