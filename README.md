@@ -1,13 +1,48 @@
-# tinyproxy cookbook
+tinyproxy cookbook
+==================
 
-# Requirements
+This cookbook installs and configures tinyproxy.
 
-# Usage
+Requirements
+-----------
 
-# Attributes
+This cookbook is confirmed on CentOS only.
 
-# Recipes
+#### packages
+- `epel` - this cookbook needs epel to install tinyproxy.
 
-# Author
+Attributes
+--------
 
-Author:: Jean-Francois Theroux (<failshell@gmail.com>)
+TBD
+
+Usage
+-----
+
+Just include `tinyproxy` in your node's `run_list`:
+
+```json
+{
+  "run_list": [
+    recipe[tinyproxy]"
+  ]
+}
+```
+
+Recipes
+------
+
+tinyproxy::default
+
+TBD
+
+Contributing
+----------
+
+TBD
+
+
+License and Author
+----------------
+
+Authors:: Jean-Francois Theroux (<failshell@gmail.com>), sekia
